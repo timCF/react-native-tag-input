@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
+import _ from 'lodash';
 
 const { width } = Dimensions.get('window');
 
@@ -18,15 +19,11 @@ type Props = {
   /**
    * A handler to be called when array of tags change
    */
-    onChange: (items: Array<any>) => void,
+    onChange: (items: Array<any> ) => void,
   /**
    * An array of tags
    */
     value: Array<any>,
-  /**
-   * An array os characters to use as tag separators
-   */
-    separators: Array<string>,
   /**
    * A RegExp to test tags after enter, space, or a comma is pressed
    */
@@ -39,14 +36,6 @@ type Props = {
    * Text color of tags
    */
     tagTextColor?: string,
-  /**
-   * Styling override for container surrounding tag text
-   */
-    tagContainerStyle?: Object,
-  /**
-   * Styling overrride for tag's text component
-   */
-    tagTextStyle?: Object,
   /**
    * Color of text input
    */
@@ -215,14 +204,14 @@ class TagInput extends Component {
   };
 
   pop = () => {
-    const tags = [...this.props.value];
+    const tags = _.clone(this.props.value);
     tags.pop();
     this.props.onChange(tags);
     this.focus();
   };
 
   removeIndex = (index: number) => {
-    const tags = [...this.props.value];
+    const tags = _.clone(this.props.value);
     tags.splice(index, 1);
     this.props.onChange(tags);
     this.focus();
@@ -282,7 +271,7 @@ class TagInput extends Component {
 
     const inputProps = { ...defaultInputProps, ...this.props.inputProps };
 
-    const wrapperHeight = (lines - 1) * 40 + 36;
+    const wrapperHeight = (lines - 1) * 40 + 25;
 
     const width = inputWidth ? inputWidth : 400;
 
@@ -334,8 +323,6 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 3,
-    marginBottom: 2,
     alignItems: 'flex-start',
   },
   tagInputContainerScroll: {
@@ -345,22 +332,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'center',
   },
   textInput: {
-    height: 36,
+    height: 25,
     fontSize: 16,
     flex: .6,
-    marginBottom: 6,
     padding: 0,
 
   },
   textInputContainer: {
-    height: 36,
+    height: 25,
   },
   tag: {
     justifyContent: 'center',
-    marginTop: 6,
     marginRight: 3,
+    marginBottom: 3,
     padding: 8,
     height: 24,
     borderRadius: 2,
